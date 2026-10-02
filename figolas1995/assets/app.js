@@ -170,3 +170,24 @@
     b.addEventListener('pointerleave', () => { b.style.transform = ''; });
   });
 })();
+
+// vodorovná galerie řízená svislým scrollem (Kino): JS jen spočítá vzdálenost, pohyb řeší CSS
+(() => {
+  const hz = document.querySelector('.hz'); if (!hz || !CSS.supports('animation-timeline: view()')) return;
+  const tr = hz.querySelector('.hz-track');
+  const set = () => { hz.classList.add('go'); const d = Math.max(0, tr.scrollWidth - innerWidth); hz.style.setProperty('--dist', d); };
+  set(); addEventListener('resize', set); addEventListener('load', set);
+})();
+
+// Galerie: šipky a počítadlo u pásu fotek
+(() => {
+  const s = document.querySelector('.g-strip'); if (!s) return;
+  const items = [...s.children], cur = document.getElementById('g-cur');
+  const idx = () => { const x = s.scrollLeft + 1; let k = 0; items.forEach((it, i) => { if (it.offsetLeft - items[0].offsetLeft <= x) k = i; }); return k; };
+  let t = 0;
+  s.addEventListener('scroll', () => { if (t) return; t = requestAnimationFrame(() => { cur.textContent = String(idx() + 1).padStart(2, '0'); t = 0; }); }, { passive: true });
+  document.querySelectorAll('[data-g]').forEach(b => b.addEventListener('click', () => {
+    const k = Math.max(0, Math.min(items.length - 1, idx() + +b.dataset.g));
+    s.scrollTo({ left: items[k].offsetLeft - items[0].offsetLeft, behavior: 'smooth' });
+  }));
+})();
