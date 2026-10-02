@@ -307,3 +307,16 @@ body{font-size:17px}
   .ab-img{width:86%}
   .ftr-name{font-size:var(--mast-m);white-space:normal}
 }
+
+/* ===== tmavá varianta (firmy, video, eventy) ===== */
+.theme-dark{--bg:#14110f;--bg-2:#1c1815;--ink:#efe7dc;--ink-2:rgba(239,231,220,.66);--line:rgba(239,231,220,.15);--dark:#ebe3d6;--on-dark:#1b1714}
+.theme-dark body::after{mix-blend-mode:screen;opacity:.05}
+.theme-dark .h2 em,.theme-dark .logo em,.theme-dark .story h3,.theme-dark .sign,.theme-dark .ct-mail{color:var(--accent-bright)}
+.theme-dark .ct-mail{border-color:var(--accent-bright)}
+.theme-dark .dark{--line:rgba(27,23,20,.16);--ink-2:rgba(27,23,20,.66)}
+.theme-dark .dark .h2 em,.theme-dark .st-num{color:var(--accent)}
+.theme-dark .ftr{background:#0d0b0a;color:#efe7dc}
+.theme-dark .ftr-name em{color:var(--accent-bright)}
+.theme-dark .ftr-row{color:rgba(239,231,220,.6);border-color:rgba(239,231,220,.14)}
+.theme-dark .btn:hover{background:var(--accent-bright);color:#14110f}
+.theme-dark .hdr.solid .nav-cta:hover{background:var(--ink);color:var(--bg)}
