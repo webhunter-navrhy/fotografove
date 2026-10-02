@@ -17,10 +17,11 @@
   $$('[data-r]').forEach(el => io.observe(el));
 
   // lightbox
-  const lb = $('#lb'), lbImg = $('#lb-img'), lbCount = $('#lb-count'), btns = $$('[data-lb-i]');
+  const lb = $('#lb'), lbImg = $('#lb-img'), lbCount = $('#lb-count');
+  const list = [...new Set($$('[data-full]').map(b => b.dataset.full))];
   let cur = 0;
-  const show = i => { cur = (i + btns.length) % btns.length; lbImg.src = btns[cur].dataset.full; lbCount.textContent = `${cur + 1} / ${btns.length}`; };
-  btns.forEach((b, i) => b.addEventListener('click', () => { show(i); lb.showModal(); }));
+  const show = i => { cur = (i + list.length) % list.length; lbImg.src = list[cur]; lbCount.textContent = `${cur + 1} / ${list.length}`; };
+  document.addEventListener('click', e => { const b = e.target.closest('[data-full]'); if (!b || b.closest('dialog')) return; show(list.indexOf(b.dataset.full)); lb.showModal(); });
   lb.addEventListener('click', e => {
     const a = e.target.closest('[data-lb]')?.dataset.lb;
     if (a === 'close' || e.target === lb) lb.close();
@@ -42,6 +43,15 @@
       li.addEventListener('pointerleave', () => { on = false; prev.classList.remove('on'); });
     });
   }
+
+  // vodorovné pásy: tažení myší
+  $$('.strip').forEach(s => {
+    let down = false, sx = 0, sl = 0, moved = 0;
+    s.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = 0; sx = e.clientX; sl = s.scrollLeft; s.classList.add('drag'); });
+    addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; moved = Math.max(moved, Math.abs(dx)); s.scrollLeft = sl - dx; });
+    addEventListener('pointerup', () => { down = false; s.classList.remove('drag'); });
+    s.addEventListener('click', e => { if (moved > 6) { e.stopPropagation(); e.preventDefault(); moved = 0; } }, true);
+  });
 
   // formulář → e-mail
   $$('form[data-mail]').forEach(f => f.addEventListener('submit', e => {
